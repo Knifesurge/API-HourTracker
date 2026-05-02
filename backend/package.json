@@ -1,0 +1,22 @@
+{
+  "name": "@api-hourtracker/backend",
+  "version": "1.0.0",
+  "description": "A barebones API allowing users to track time spent doing any activity they want.",
+  "license": "ISC",
+  "author": "Nick Mills",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --watch ./src/server.js --watch backend/routes --ext js,json ./src/server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "nodemon": "^3.1.14"
+  }
+}
