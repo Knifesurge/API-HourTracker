@@ -4,7 +4,7 @@ This project allows users to track hours for user-defined activities, such as wo
 
 # Project Notes / Mind mapping
 
-If you want to see how my brain thinks and breaks down this project, take a look at my notes in my [project notion page]("https://www.notion.so/API-Hour-Tracker-3563eb82730980acb7eee617d8b73c05")
+If you want to see how my brain thinks and breaks down this project, take a look at my notes in my [project notion page](https://www.notion.so/API-Hour-Tracker-3563eb82730980acb7eee617d8b73c05)
 
 # Project Structure
 
