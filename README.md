@@ -2,6 +2,10 @@
 
 This project allows users to track hours for user-defined activities, such as work, gaming, reading, exercise, studying, etc.
 
+# Project Notes / Mind mapping
+
+If you want to see how my brain thinks and breaks down this project, take a look at my notes in my [project notion page]("https://www.notion.so/API-Hour-Tracker-3563eb82730980acb7eee617d8b73c05")
+
 # Project Structure
 
 `backend/` provides the express server used to serve the api, and is the backbone of the application. It handles requests and updates data as it is modified.
