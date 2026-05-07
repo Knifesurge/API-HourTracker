@@ -12,7 +12,11 @@
     "scripts": {
         "start:backend": "npm run start -w @api-hourtracker/backend",
         "start:frontend": "npm run start -w @api-hourtracker/frontend",
-        "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+        "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+        "docker:pause": "docker compose stop",
+        "docker:resume": "docker compose start",
+        "docker:stop":  "docker compose down",
+        "docker:restart": "docker compose down && docker compose up -d"
     },
     "dependencies": {
         "concurrently": "^9.2.1"

@@ -11,7 +11,12 @@
     "start": "nodemon --watch ./src/server.ts --watch src/routes --watch src/controllers --ext js,ts,json --exec tsx ./src/server.ts",
     "db:reset": "prisma migrate reset --force",
     "db:rebuild": "prisma migrate reset --force && prisma generate",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "docker:pause": "docker compose -f ../docker/docker-compose.yml stop",
+    "docker:resume": "docker compose -f ../docker/docker-compose.yml start",
+    "docker:stop":  "docker compose -f ../docker/docker-compose.yml down",
+    "docker:start": "docker compose -f ../docker/docker-compose.yml up -d",
+    "docker:restart": "npm run docker:stop && npm run docker:start"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
