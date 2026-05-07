@@ -5,7 +5,7 @@ async function main() {
     await prisma.activity.deleteMany();
     await prisma.user.deleteMany();
 
-    const user = await prisma.user.create({
+    const user1 = await prisma.user.create({
         data: {
             email: "nick@example.com",
             name: "Nick",
@@ -21,14 +21,40 @@ async function main() {
         }
     });
 
+    const user2 = await prisma.user.create({
+        data: {
+            email: "jar@example.com",
+            name: "Jar",
+            activities: {
+                create: [
+                    { name: 'Gaming' },
+                    { name: 'Working' },
+                    { name: "Watching TV" },
+                ],
+            },
+        },
+        include: {
+            activities: true
+        }
+    })
+
     const timeEntry = await prisma.timeEntry.create({
         data: {
-            userId: user.id,
-            activityId: user.activities[0]?.id,
+            userId: user1.id,
+            activityId: user1.activities[0]?.id,
             startTime: new Date(),
             duration: 3600
         }
-    })
+    });
+
+    const timeEntry2 = await prisma.timeEntry.create({
+        data: {
+            userId: user2.id,
+            activityId: user2.activities[0]?.id,
+            startTime: new Date(),
+            duration: 4200
+        }
+    });
 };
 
 main()
