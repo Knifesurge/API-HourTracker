@@ -41,7 +41,7 @@ async function main() {
     const timeEntry = await prisma.timeEntry.create({
         data: {
             userId: user1.id,
-            activityId: user1.activities[0]?.id,
+            activityId: Number(user1.activities[0]?.id),
             startTime: new Date(),
             duration: 3600
         }
@@ -50,7 +50,7 @@ async function main() {
     const timeEntry2 = await prisma.timeEntry.create({
         data: {
             userId: user2.id,
-            activityId: user2.activities[0]?.id,
+            activityId: Number(user2.activities[0]?.id),
             startTime: new Date(),
             duration: 4200
         }
