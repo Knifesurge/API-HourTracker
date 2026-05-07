@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { getActivities, getUsers } from '../controllers/userController.js'
+import { getUsers } from '../controllers/userController.js';
+import { getActivities } from '../controllers/activityController.js';
 
 const router = Router({ mergeParams: true });
 
