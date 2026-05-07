@@ -1,11 +1,7 @@
 import type { Request, Response } from 'express';
 import prisma from '../lib/prisma.js';
 
-<<<<<<< HEAD
-const getActivities = async (req: Request, res: Response) => {
-=======
 const getUserActivities = async (req: Request, res: Response) => {
->>>>>>> docker
     const userId = Number(req.params.userId);
 
     try {
@@ -30,12 +26,6 @@ const getAllActivities = async (req: Request, res: Response) => {
 }
 
 export {
-<<<<<<< HEAD
-    getActivities,
-    getAllActivities
-}
-=======
     getUserActivities,
     getAllActivities
 }
->>>>>>> docker
