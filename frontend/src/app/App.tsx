@@ -1,9 +1,7 @@
-import 'tailwindcss/tailwind.css';
-
 function App() {
   return (
     <>
-      <p>My App</p>
+      <p className='text-3xl bg-red-400 font-bold underline'>My App</p>
     </>
   )
 }
