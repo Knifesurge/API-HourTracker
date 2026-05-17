@@ -5,9 +5,21 @@ const getUserActivities = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
 
     try {
-        const activities = await prisma.activity.findMany({
-            where: { userId },
+        // Get unique user
+        const user = await prisma.user.findUnique({
+            where: { id: userId },
+            include: {
+                activities: {
+                    include: {
+                        activity: true,
+                    },
+                },
+            }
         });
+        // Get activity list for user
+        const activities = user?.activities.map(
+            (userActivity) => userActivity.activity
+        );
         return res.json(activities);
     } catch (err) {
         console.error(err);
