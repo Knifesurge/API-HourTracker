@@ -1,12 +1,21 @@
+import { DashboardCardContent } from "./DashboardCardContent";
+import { DashboardCardFooter } from "./DashboardCardFooter";
+import { DashboardCardTitle } from "./DashboardCardTitle";
 
 const Dashboard = () => {
     return (
         <div>
-            <h1>Dashboard Title</h1>
-            <br />
-            <p>Dashboard content goes here.</p>
-            <br />
-            <footer>Dashboard Footer</footer>
+            <DashboardCardTitle
+                title="Dashboard Title from component"
+            />
+            <hr />
+            <DashboardCardContent 
+                content="Dashboard content goes here from component"
+            />
+            <hr />
+            <DashboardCardFooter
+                content="Dashboard Footer from component"
+            />
         </div>
     );
 }

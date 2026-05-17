@@ -7,7 +7,6 @@
     "start": "vite"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.0",
     "clsx": "^2.1.1",
     "postcss-nesting": "^14.0.0",
     "react": "^19.2.5",
