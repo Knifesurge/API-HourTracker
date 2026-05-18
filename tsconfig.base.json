@@ -35,14 +35,5 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-    // Added options
-    "paths": {
-      "@/backend/*": [
-        "./backend/src/*"
-      ],
-      "@/frontend/*": [
-        "./frontend/src/*"
-      ]
-    }
   }
 }
