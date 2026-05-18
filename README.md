@@ -16,7 +16,8 @@ The backend does not depend on the frontend, and is not coupled from back to fro
 
 # Routes
 
-`/` - Shows information on how to use the application
+`/` - Shows information on how to use the application.
+
 `/<id>` - Shows tracking related to the specified User ID. The ID is required to be able to access any actual data.
 
 `/<id>/activities` - Lists all  activities for the specified User ID.
