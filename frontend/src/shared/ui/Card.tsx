@@ -93,6 +93,7 @@ const Card = ({
     const base = `
         flex
         flex-col
+        overflow-hidden
         transition-colors
         duration-200
     `;

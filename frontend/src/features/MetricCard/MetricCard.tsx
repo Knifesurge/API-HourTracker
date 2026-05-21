@@ -8,21 +8,31 @@ type MetricCardSize = "sm"
 
 const sizes = {
     sm: `
-        p-4
         min-h-[100px]
     `,
     md: `
-        p-5
         min-h-[120px]
     `,
     lg: `
-        p-6
         min-h-[160px]
     `,
     xl: `
-        p-8
         min-h-[220px]
     `
+} as const;
+
+const valueSizes = {
+    sm: "text-2xl",
+    md: "text-3xl",
+    lg: "text-4xl",
+    xl: "text-5xl"
+} as const;
+
+const iconSizes = {
+    sm: "size-4",
+    md: "size-5",
+    lg: "size-6",
+    xl: "size-7"
 } as const;
 
 type MetricCardProps = {
@@ -30,20 +40,70 @@ type MetricCardProps = {
     value: string;
     change?: string;
     size?: MetricCardSize;
+    icon?: React.ReactNode;
 }
 
 const MetricCard = ({
     label,
     value,
     change,
+    icon,
     size = "md"
 }: MetricCardProps) => {
     return (
-        <div className="bg-surface rounded-lg p-4 shadow-md">
-            <h2 className="text-xl font-semibold mb-2">{label}</h2>
-            <p className="text-3xl font-bold"></p>
-            <p className="text-sm text-gray-500">{description}</p>
-        </div>
+        <Card
+            variant="default"
+            size={size}
+            className={sizes[size]}
+        >
+            <Card.Header>
+                <div className="space-y-1">
+                    <Card.Description>
+                        {label}
+                    </Card.Description>
+
+                    <Card.Title
+                        className={cn(
+                            "font-semibold tracking-tight",
+                            valueSizes[size]
+                        )}
+                    >
+                        {value}
+                    </Card.Title>
+                </div>
+
+                {icon && (
+                    <div
+                        className={cn(
+                            `
+                            flex
+                            items-center
+                            justify-center
+                            text-muted
+                            `,
+                            iconSizes[size]
+                        )}
+                    >
+                        {icon}
+                    </div>
+                )}
+            </Card.Header>
+
+            {change && (
+                <Card.Footer>
+                    <div
+                        className={cn(
+                            "text-sm font-medium",
+                            change.startsWith("+")
+                                ? "text-success"
+                                : "text-danger"
+                        )}
+                    >
+                        {change}
+                    </div>
+                </Card.Footer>
+            )}
+        </Card>
     );
 }
 
