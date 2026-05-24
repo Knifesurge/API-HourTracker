@@ -1,17 +1,13 @@
 import { cn } from "@/shared/lib";
-import { useState } from "react";
+import { type Page } from "@/app/AppLayout";
 
-const tabs = [
-    "Dashboard",
-    "Activities",
-    "Analytics"
-] as const;
+type SidebarProps = {
+    validPages: Page[];
+    activePage: Page;
+    onPageChange: (page: Page) => void;
+}
 
-type Tab = typeof tabs[number];
-
-const Sidebar = () => {
-
-    const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
+const Sidebar = ({ validPages, activePage, onPageChange }: SidebarProps) => {
 
     const sidebarItemBase = `
         px-3
@@ -20,14 +16,8 @@ const Sidebar = () => {
         text-left
     `;
 
-    const isValidTab = (value: string): value is Tab => {
-        return tabs.includes(value as Tab);
-    };
-
-    const handleTabPress = (tab : Tab) => {
-        if (isValidTab(tab)) {
-            setActiveTab(tab);
-        }
+    const handleTabPress = (page: Page) => {
+        onPageChange(page);
     }
 
     return (
@@ -57,17 +47,17 @@ const Sidebar = () => {
                     flex-col
                     gap-2
                 ">
-                    {tabs.map((tab) => (
+                    {validPages.map((page) => (
                         <button 
-                            key={tab}
-                            onClick={() => handleTabPress(tab)}
+                            key={page}
+                            onClick={() => handleTabPress(page)}
                             className={cn(
                                 sidebarItemBase,
-                                activeTab === tab 
+                                activePage === page 
                                     ? "bg-surface-hover"
                                     : "hover:bg-surface-hover transition-colors",
                         )}>
-                            {tab}
+                            {page}
                         </button>
                     ))}
                 </nav>
