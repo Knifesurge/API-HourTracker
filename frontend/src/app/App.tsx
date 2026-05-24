@@ -1,6 +1,5 @@
 import { Sidebar } from "@/shared/ui";
-import { MetricCard, MetricCardPage } from "@/features/MetricCard";
-import { Clock3, Flame, Timer, TrendingUp } from "lucide-react";
+import { MetricCardPage } from "@/features/MetricCard";
 
 function App() {
   return (

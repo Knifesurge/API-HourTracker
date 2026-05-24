@@ -1,6 +1,17 @@
 import { cn } from "@/shared/lib";
+import { useState } from "react";
+
+const tabs = [
+    "Dashboard",
+    "Activities",
+    "Analytics"
+] as const;
+
+type Tab = typeof tabs[number];
 
 const Sidebar = () => {
+
+    const [activeTab, setActiveTab] = useState<Tab>(tabs[0]);
 
     const sidebarItemBase = `
         px-3
@@ -8,6 +19,16 @@ const Sidebar = () => {
         rounded-xl
         text-left
     `;
+
+    const isValidTab = (value: string): value is Tab => {
+        return tabs.includes(value as Tab);
+    };
+
+    const handleTabPress = (tab : Tab) => {
+        if (isValidTab(tab)) {
+            setActiveTab(tab);
+        }
+    }
 
     return (
         <aside
@@ -36,26 +57,19 @@ const Sidebar = () => {
                     flex-col
                     gap-2
                 ">
-                    <button className={cn(
-                        sidebarItemBase,
-                        "bg-surface-hover"
-                    )}>
-                        Dashboard
-                    </button>
-
-                    <button className={cn(
-                        sidebarItemBase,
-                        "hover:bg-surface-hover transition-colors"
-                    )}>
-                        Activities
-                    </button>
-
-                    <button className={cn(
-                        sidebarItemBase,
-                        "hover:bg-surface-hover transition-colors"
-                    )}>
-                        Analytics
-                    </button>
+                    {tabs.map((tab) => (
+                        <button 
+                            key={tab}
+                            onClick={() => handleTabPress(tab)}
+                            className={cn(
+                                sidebarItemBase,
+                                activeTab === tab 
+                                    ? "bg-surface-hover"
+                                    : "hover:bg-surface-hover transition-colors",
+                        )}>
+                            {tab}
+                        </button>
+                    ))}
                 </nav>
 
                 {/* Spacer */}
