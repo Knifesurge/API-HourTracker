@@ -1,2 +1,2 @@
 export * from "./MetricCard";
-export * from "./MetricCardPage";
+export * from "./MetricCardList";

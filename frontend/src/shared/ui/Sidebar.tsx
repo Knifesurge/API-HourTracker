@@ -2,7 +2,7 @@ import { cn } from "@/shared/lib";
 import { type Page } from "@/types/types";
 
 type SidebarProps = {
-    validPages: Page[];
+    validPages: readonly Page[];
     activePage: Page;
     onPageChange: (page: Page) => void;
 }
