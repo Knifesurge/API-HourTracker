@@ -1,5 +1,5 @@
 import { cn } from "@/shared/lib";
-import { type Page } from "@/app/AppLayout";
+import { type Page } from "@/types/types";
 
 type SidebarProps = {
     validPages: Page[];
@@ -31,51 +31,51 @@ const Sidebar = ({ validPages, activePage, onPageChange }: SidebarProps) => {
                 flex
                 flex-col
             ">
-                {/* LOGO */}
-                <div className="mb-8">
-                    <h1 className="
+            {/* LOGO */}
+            <div className="mb-8">
+                <h1 className="
                         text-xl
                         font-semibold
                         tracking-tight
                     ">
-                        Hour Tracker
-                    </h1>
-                </div>
-                {/* NAVIGATION */}
-                <nav className="
+                    Hour Tracker
+                </h1>
+            </div>
+            {/* NAVIGATION */}
+            <nav className="
                     flex
                     flex-col
                     gap-2
                 ">
-                    {validPages.map((page) => (
-                        <button 
-                            key={page}
-                            onClick={() => handleTabPress(page)}
-                            className={cn(
-                                sidebarItemBase,
-                                activePage === page 
-                                    ? "bg-surface-hover"
-                                    : "hover:bg-surface-hover transition-colors",
+                {validPages.map((page) => (
+                    <button
+                        key={page}
+                        onClick={() => handleTabPress(page)}
+                        className={cn(
+                            sidebarItemBase,
+                            activePage === page
+                                ? "bg-surface-hover"
+                                : "hover:bg-surface-hover transition-colors",
                         )}>
-                            {page}
-                        </button>
-                    ))}
-                </nav>
+                        {page}
+                    </button>
+                ))}
+            </nav>
 
-                {/* Spacer */}
-                <div className="flex-1" />
+            {/* Spacer */}
+            <div className="flex-1" />
 
-                {/* FOOTER */}
-                <div className="
+            {/* FOOTER */}
+            <div className="
                     border-t
                     border-borer
                     pt-4
                     text-sm
                     text-muted
                 ">
-                    Productivity Insights
-                </div>
-            </aside>
+                Productivity Insights
+            </div>
+        </aside>
     )
 }
 
