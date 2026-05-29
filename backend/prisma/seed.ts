@@ -1,4 +1,5 @@
 import prisma from "../src/lib/prisma.js";
+import bcrypt from 'bcryptjs';
 
 const ACTIVITY_NAMES = [
   "Coding",
@@ -57,17 +58,20 @@ async function main() {
     USERS
   */
 
+    // Hash the dummy password
+  const hashedPassword = await bcrypt.hash('password123', 10);
+
   const usersData = [
-    { name: "Admin", email: "admin@example.com" },
-    { name: "Nick", email: "nick@example.com" },
-    { name: "Jar", email: "jar@example.com" },
-    { name: "Sarah", email: "sarah@example.com" },
-    { name: "Michael", email: "michael@example.com" },
-    { name: "Emily", email: "emily@example.com" },
-    { name: "Daniel", email: "daniel@example.com" },
-    { name: "Jessica", email: "jessica@example.com" },
-    { name: "Chris", email: "chris@example.com" },
-    { name: "Olivia", email: "olivia@example.com" },
+    { name: "Admin", email: "admin@example.com", password: hashedPassword },
+    { name: "Nick", email: "nick@example.com", password: hashedPassword },
+    { name: "Jar", email: "jar@example.com", password: hashedPassword },
+    { name: "Sarah", email: "sarah@example.com", password: hashedPassword },
+    { name: "Michael", email: "michael@example.com", password: hashedPassword },
+    { name: "Emily", email: "emily@example.com", password: hashedPassword },
+    { name: "Daniel", email: "daniel@example.com", password: hashedPassword },
+    { name: "Jessica", email: "jessica@example.com", password: hashedPassword },
+    { name: "Chris", email: "chris@example.com", password: hashedPassword },
+    { name: "Olivia", email: "olivia@example.com", password: hashedPassword },
   ];
 
   const users = [];
