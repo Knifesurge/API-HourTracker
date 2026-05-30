@@ -5,6 +5,6 @@ import { requireAuth } from "@/backend/middleware/auth.js";
 const router = Router({ mergeParams: true });
 
 router.get('/', requireAuth, getMyActivities);
-router.post('/', requireAuth, createActivity);
+router.post('/create', requireAuth, createActivity);
 
 export default router;
