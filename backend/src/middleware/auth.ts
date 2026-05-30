@@ -16,15 +16,20 @@ const requireAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
     }
 
     try {
-        const secret = process.env.JWT_SECRET || 'my_secret_jwt_secret_key';
-        const decoded = jwt.verify(token, secret) as { userId: string; };
+        const secret = process.env.JWT_SECRET;
+        const decoded = jwt.verify(token, secret!) as { userId: string; };
 
         // Inject decoded User ID into request object for downstream routes.
         req.userId = decoded.userId;
 
         // Hand control over to next function/route handler
-        next();
+        return next();
     } catch (err) {
         return res.status(403).json({ error: 'Invalid or expired token.' });
     }
+}
+
+export {
+    type AuthRequest,
+    requireAuth
 }
