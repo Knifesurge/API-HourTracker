@@ -5,7 +5,11 @@ import { z } from "zod";
 
 const ActivitySchema = z.object({
     name: z.string().min(1, 'Activity name is required.').max(50)
-})
+});
+
+const ParamIdSchema = z.object({
+    id: z.string().regex(/^\d+$/, 'ID must be a numeric string.')
+});
 
 const createActivity = async (req: AuthRequest, res: Response) => {
     const validation = ActivitySchema.safeParse(req.body);
@@ -84,6 +88,35 @@ const getMyActivities = async (req: AuthRequest, res: Response) => {
     }
 }
 
+const deleteMyActivityLink = async (req: AuthRequest, res: Response) => {
+    const validation = ParamIdSchema.safeParse(req.params);
+    if (!validation.success) {
+        return res.status(400).json({ error: 'Invalid URL parameter format.' });
+    }
+
+    const activityIdToDelete = parseInt(validation.data.id);
+    const numericUserId = parseInt(req.userId || '');
+    if (isNaN(numericUserId)) {
+        return res.status(401).json({ error: 'Invalid session profile.' });
+    }
+
+    try {
+        // Remove the junction record mapping.
+        await prisma.userActivity.delete({
+            where: {
+                userId_activityId: {
+                    userId: numericUserId,
+                    activityId: activityIdToDelete
+                }
+            }
+        });
+
+        return res.json({ message: 'Activity unlinked from your profile.' });
+    } catch (err) {
+        return res.status(500).json({ error: 'Failed to unlink activity from your profile.' });
+    }
+}
+
 const getAllActivities = async (req: Request, res: Response) => {
     try {
         const activities = await prisma.activity.findMany();
@@ -97,5 +130,6 @@ const getAllActivities = async (req: Request, res: Response) => {
 export {
     getMyActivities,
     getAllActivities,
-    createActivity
+    createActivity,
+    deleteMyActivityLink
 }

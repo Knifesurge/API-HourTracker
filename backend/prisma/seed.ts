@@ -79,6 +79,8 @@ async function main() {
   for (let i = 0; i < usersData.length; i++) {
     const userData = usersData[i];
 
+    if (!userData) continue;  // Guard against undefined to satisfy checks
+
     const user = await prisma.user.create({
       data: userData,
     });
