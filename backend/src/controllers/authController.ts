@@ -10,6 +10,8 @@ const AuthSchema = z.object({
     name: z.string().min(1, 'Name field required.')
 });
 
+const LoginSchema = AuthSchema.omit({ name: true });
+
 const registerUser = async (req: Request, res: Response) => {
     const validation = AuthSchema.safeParse(req.body);
     if (!validation.success) {
@@ -44,7 +46,7 @@ const registerUser = async (req: Request, res: Response) => {
 }
 
 const loginUser = async (req: Request, res: Response) => {
-    const validation = AuthSchema.safeParse(req.body);
+    const validation = LoginSchema.safeParse(req.body);
     if (!validation.success) {
         return res.status(400).json({ error: z.treeifyError(validation.error) });
     }

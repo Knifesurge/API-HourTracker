@@ -1,4 +1,4 @@
-import prisma from "../src/lib/prisma.js";
+import { prisma } from "../src/lib/prisma.js";
 import bcrypt from 'bcryptjs';
 
 const ACTIVITY_NAMES = [
