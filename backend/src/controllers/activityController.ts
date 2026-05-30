@@ -51,7 +51,7 @@ const createActivity = async (req: AuthRequest, res: Response) => {
             const userLink = await tx.userActivity.create({
                 data: {
                     userId: numericUserId,
-                    activityId = activityRecord.id,
+                    activityId: activityRecord.id,
                 },
                 include: { activity : true }
             });
