@@ -1,18 +1,21 @@
-import express, { type Request, type Response} from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { prisma } from "@/backend/lib/prisma.js"
+import type { Request, Response } from "express";
+import { z } from "zod";
+import { prisma } from "../lib/prisma.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET as string;
+const AuthSchema = z.object({
+    email: z.email('Invalid email address format.'),
+    password: z.string().min(6, 'Password must be at least 6 characters long.'),
+    name: z.string().min(1, 'Name field required.')
+});
 
-// REGISTER USER
-router.post('/register', async (req: Request, res: Response) => {
-    const { name, email, password } = req.body;
-
-    if (!name || !email || !password) {
-        return res.status(400).json({ error: 'Name, Email and Password are required.' });
+const registerUser = async (req: Request, res: Response) => {
+    const validation = AuthSchema.safeParse(req.body);
+    if (!validation.success) {
+        return res.status(400).json({ error: z.treeifyError(validation.error) });
     }
+    const { name, email, password } = validation.data;
 
     try {
         const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -38,15 +41,16 @@ router.post('/register', async (req: Request, res: Response) => {
     } catch (err) {
         return res.status(500).json({ error: 'Server error during registration.' });
     }
-});
+}
 
-// LOGIN USER
-router.post('/login', async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required.' });
+const loginUser = async (req: Request, res: Response) => {
+    const validation = AuthSchema.safeParse(req.body);
+    if (!validation.success) {
+        return res.status(400).json({ error: z.treeifyError(validation.error) });
     }
+
+    const { email, password } = req.body;
+    const JWT_SECRET = process.env.JWT_SECRET as string;
 
     try {
         // Find user by email
@@ -63,10 +67,21 @@ router.post('/login', async (req: Request, res: Response) => {
 
         // Sign a JWT valid for 24 hours
         const token = jwt.sign({ userId: String(user.id) }, JWT_SECRET, { expiresIn: '24h' });
-        return res.json({ token, message: 'Login successful.' });
+        return res.json({ 
+            token, 
+            message: 'Login successful.',
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }
+        });
     } catch (err) {
         res.status(500).json({ error: 'Server error during login.' });
     }
-});
+}
 
-export default router;
+export {
+    registerUser,
+    loginUser
+}

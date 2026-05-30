@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getAllUsers } from '../controllers/userController.js';
 import { getUserActivities } from '../controllers/activityController.js';
-import { getUserHours } from '../controllers/hourController.js';
+import { getUserHours } from '../controllers/timeController.js';
 
 const router = Router({ mergeParams: true });
 
