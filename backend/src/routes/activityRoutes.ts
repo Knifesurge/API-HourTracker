@@ -1,8 +1,11 @@
 import { Router } from 'express';
-import { getAllActivities } from "../controllers/activityController.js";
+import { createActivity, deleteMyActivityLink, getMyActivities } from "../controllers/activityController.js";
+import { requireAuth } from "@/backend/middleware/auth.js";
 
 const router = Router({ mergeParams: true });
 
-router.get('/', getAllActivities);
+router.get('/', requireAuth, getMyActivities);
+router.post('/create', requireAuth, createActivity);
+router.delete('/:id', requireAuth, deleteMyActivityLink);
 
 export default router;

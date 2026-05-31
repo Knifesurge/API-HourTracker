@@ -12,7 +12,8 @@
     "scripts": {
         "start:backend": "npm run start -w @api-hourtracker/backend",
         "start:frontend": "npm run start -w @api-hourtracker/frontend",
-        "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
+        "start:docker": "docker compose -f docker/docker-compose.yml --env-file .env up --build",
+        "stop:docker": "docker compose -f docker/docker-compose.yml --env-file .env down"
     },
     "dependencies": {
         "concurrently": "^9.2.1"
