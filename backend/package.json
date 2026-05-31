@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "TS_NODE_PROJECT=./tsconfig.json nodemon --watch ./src/server.ts --watch src/routes --watch src/controllers --ext js,ts,json --exec tsx -r tsconfig-paths/register ./src/server.ts",
     "db:reset": "prisma migrate reset --force",
-    "db:rebuild": "prisma migrate reset --force --schema=./prisma/schema.prisma",
+    "db:rebuild": "prisma migrate reset --force --schema=./prisma/schema.prisma && DATABASE_URL=\"postgresql://mock:mock@localhost:5432/mock\" prisma generate --schema=./prisma/schema.prisma",
     "db:seed": "prisma db seed",
     "docker:pause": "docker compose -f ../docker/docker-compose.yml stop",
     "docker:resume": "docker compose -f ../docker/docker-compose.yml start",
