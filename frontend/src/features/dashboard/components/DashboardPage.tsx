@@ -202,13 +202,97 @@ const DashboardPage: React.FC = () => {
           </>
         ) : (
           <>
+            <div className="space-y-1">
+              <h3 className="text-base font-semibold text-primary">What are you working on right now?</h3>
+              <p className="text-xs text-muted">Select an item to start tracking</p>
+            </div>
 
+            <form
+              onSubmit={handleStartTimer}
+              className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center w-full md:w-auto"
+            >
+              <select
+                value={selectedActivityId}
+                onChange={(e) => setSelectedActivityId(e.target.value)}
+                disabled={actionLoading || activities.length === 0}
+                className="px-3 py-2 rounded-lg bg-input border border-input text-sm text-primary focus:outline-none focus:border-accent transition-all min-w-[200px]"
+              >
+                <option value="">-- Choose an Activity --</option>
+                {activities.map(activity => (
+                  <option key={activity.id} value={activity.id} className="capitalize">{activity.name}</option>
+                ))}
+              </select>
+
+              <button
+                type="submit"
+                disabled={actionLoading || !selectedActivityId}
+                className="px-5 py-2 rounded-xl font-semibold text-sm bg-accent text-accent-foreground hover:bg-accent-hover transition-all disabled:opacity-50 cursor-pointer whitespace-nowrap"
+              >
+                Start Tracking
+              </button>
+            </form>
           </>
         )}
       </div>
+
+      {/* Tier 2: Analytical Metrics Grid Blocks */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="p-4 bg-card border border-border rounded-xl">
+          <p className="text-xs font-medium text-muted uppercase tracking-wider">Total Time Tracked</p>
+          <p className="text-2xl font-semibold text-primary mt-1">{totalHoursDisplay} <span className="text-sm font-normal text-muted">hrs</span></p>
+        </div>
+        <div className="p-4 bg-card border border-border rounded-xl">
+          <p className="text-xs font-medium text-muted uppercase tracking-wider">Completed Sessions</p>
+          <p className="text-2xl font-semibold text-primary mt-1">{completedEntries.length} <span className="text-sm font-normal text-muted">activities</span></p>
+        </div>
+      </div>
+
+      {/* Tier 3: History Ledger Table Container */}
+      <div className="p-5 bg-card border border-border rounded-xl space-y-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wider text-secondary">Recent Tracking History</h3>
+
+        {timeEntries.length === 0 ? (
+          <p className="text-xs text-muted text-center py-6">No tracking history available.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-border text-xs font-semibold text-muted bg-surface-hover/20">
+                  <th className="py-2 px-3">Activity</th>
+                  <th className="py-2 px-3">Started</th>  
+                  <th className="py-2 px-3">Ended</th>
+                  <th className="py-2 px-3 text-right">Duration</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {timeEntries.map(entry => (
+                  <tr key={entry.id} className="hover:bg-surface-hover/30 transition-colors">
+                    <td className="py-3 px-3 font-medium text-primary capitalize">
+                      {entry.activity?.name || activities.find(a => a.id === entry.activityId)?.name || "Task Logging"}
+                    </td>
+                    <td className="py-3 px-3 text-secondary text-xs">
+                      {new Date(entry.startTime).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" })}
+                    </td>
+                    <td className="py-3 px-3 text-secondary text-xs">
+                      {entry.endTime ? (
+                        new Date(entry.endTime).toLocaleString(undefined, { dateStyle: "short", timeStyle: "short" })
+                      ) : (
+                        <span className="px-2 py-0.5 text-[10px] font-bold bg-danger/10 text-danger animate-pulse uppercase">Active</span>
+                      )}
+                    </td>
+                    <td className="py-3 px-3 text-right font-mono font-medium">
+                      {entry.duration !== null ? `${entry.duration}m` : "--"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            </div>
+        )}
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export {
   DashboardPage
