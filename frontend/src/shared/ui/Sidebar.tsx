@@ -1,13 +1,16 @@
 import { cn } from "@/shared/lib";
 import { type Page } from "@/types/types";
+import { type UserProfile } from "@/features/auth/api/auth";
 
 type SidebarProps = {
     validPages: readonly Page[];
     activePage: Page;
     onPageChange: (page: Page) => void;
+    currentUser: UserProfile | null;
+    onLogout: () => void;
 }
 
-const Sidebar = ({ validPages, activePage, onPageChange }: SidebarProps) => {
+const Sidebar = ({ validPages, activePage, onPageChange, currentUser, onLogout }: SidebarProps) => {
 
     const sidebarItemBase = `
         px-3
@@ -73,7 +76,30 @@ const Sidebar = ({ validPages, activePage, onPageChange }: SidebarProps) => {
                     text-sm
                     text-muted
                 ">
-                Productivity Insights
+                {/* User context card */}
+                {currentUser && (
+                    <div className="px-1">
+                        <p className="text-xs text-muted font-medium">Logged in as</p>
+                        <p className="text-xs font-medium truncate text-primary" title={currentUser.email}>
+                            {currentUser.name || currentUser.email}
+                        </p>
+                    </div>
+                )}
+
+                {/* Signout button */}
+                <button
+                    onClick={onLogout}
+                    className={cn(
+                        sidebarItemBase,
+                        "w-full text-center text-xs font-semibold bg-surface border border-border text-primary hover:bg-danger/10 hover:text-danger hover:border-danger/30 transition-colors cursor-pointer"
+                    )}
+                >
+                    Sign Out
+                </button>
+
+                <div className="text-xs text-muted px-1 mt-1">
+                    Productivity Insights
+                </div>
             </div>
         </aside>
     )
