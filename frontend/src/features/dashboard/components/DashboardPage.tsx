@@ -198,7 +198,28 @@ const DashboardPage: React.FC = () => {
       <div className={timerPanelStyle}>
         {activeTimer ? (
           <>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-danger animate-pulse" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-danger">Tracking Live Session</span>
+              </div>
+              <h3 className="text-lg font-medium text-primary capitalize">
+                {activeTimer.activity?.name || activities.find(a => a.id === activeTimer.activityId)?.name || "Active Task"}
+              </h3>
+            </div>
 
+            <div className="flex items-center gap-6 justify-between md:justify-end">
+              <span className="font-mono text-3xl font-bold tracking-tight text-primary">
+                {formatSecondsToClock(elapsedSeconds)}
+              </span>
+              <button
+                onClick={handleStopTimer}
+                disabled={actionLoading}
+                className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-danger text-white hover:bg-danger transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                Stop Timer
+              </button>
+            </div>
           </>
         ) : (
           <>
