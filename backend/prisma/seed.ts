@@ -142,7 +142,7 @@ async function main() {
       const durationSeconds = randomInt(1800, 14400); // 30 mins -> 4 hours
 
       const endTime = new Date(
-        startTime.getTime() + durationSeconds * 60_000
+        startTime.getTime() + (durationSeconds * 1000)
       );
 
       await prisma.timeEntry.create({

@@ -166,8 +166,17 @@ const DashboardPage: React.FC = () => {
   };
 
   const completedEntries = timeEntries.filter(e => e.endTime !== null);
-  const totalMinutesTracked = completedEntries.reduce((sum, e) => sum + (e.duration || 0), 0);
+  // Dynamic calculation fallback: Recompute real minutes from raw timestamps
+  const totalMinutesTracked = completedEntries.reduce((sum, e) => {
+    const start = new Date(e.startTime).getTime();
+    const end = new Date(e.endTime!).getTime(); // Asserting non-null since filtered above
+    const realDiffMinutes = Math.round((end - start) / 60000);
+    return sum + realDiffMinutes;
+  }, 0);
+
+  // Safely translate the clean, corrected minutes total into standard decimal hours
   const totalHoursDisplay = (totalMinutesTracked / 60).toFixed(1);
+
 
   if (isLoading) {
     return (
@@ -198,7 +207,28 @@ const DashboardPage: React.FC = () => {
       <div className={timerPanelStyle}>
         {activeTimer ? (
           <>
-
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-danger animate-pulse" />
+                <span className="text-xs font-semibold uppercase tracking-wider text-danger">Tracking Live Session</span>
+              </div>
+              <h3 className="text-lg font-medium text-primary capitalize">
+                {activeTimer.activity?.name || activities.find(a => a.id === activeTimer.activityId)?.name || "Active Task"}
+              </h3>
+            </div>
+            
+            <div className="flex items-center gap-6 justify-between md:justify-end">
+              <span className="font-mono text-3xl font-bold tracking-tight text-primary">
+                {formatSecondsToClock(elapsedSeconds)}
+              </span>
+              <button
+                onClick={handleStopTimer}
+                disabled={actionLoading}
+                className="px-5 py-2.5 rounded-xl font-semibold text-sm bg-danger text-white hover:bg-red-600 transition-colors disabled:opacity-50 cursor-pointer"
+              >
+                Stop Timer
+              </button>
+            </div>
           </>
         ) : (
           <>
@@ -281,7 +311,16 @@ const DashboardPage: React.FC = () => {
                       )}
                     </td>
                     <td className="py-3 px-3 text-right font-mono font-medium">
-                      {entry.duration !== null ? `${entry.duration}m` : "--"}
+                      {entry.endTime ? (
+                        (() => {
+                          const start = new Date(entry.startTime).getTime();
+                          const end = new Date(entry.endTime!).getTime();
+                          const diffMinutes = Math.round((end - start) / 60_000);
+                          return `${diffMinutes} min`;
+                        })()
+                      ) : (
+                        "--"
+                      )}
                     </td>
                   </tr>
                 ))}
