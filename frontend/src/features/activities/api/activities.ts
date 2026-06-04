@@ -1,4 +1,4 @@
-import { apiClient } from "./client";
+import { apiClient } from "../../auth/api/client";
 
 interface Activity {
     id: number;
@@ -28,4 +28,4 @@ export {
     fetchMyActivitiesAPI,
     createActivityAPI,
     deleteActivityAPI
-}
+};

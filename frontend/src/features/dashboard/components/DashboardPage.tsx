@@ -5,7 +5,7 @@ import {
   stopTimerAPI,
   type TimeEntry
 } from "@/features/auth/api/timeEntries";
-import { fetchMyActivitiesAPI, type Activity } from '@/features/auth/api/activities';
+import { fetchMyActivitiesAPI, type Activity } from '@/features/activities/api/activities';
 import { DNA } from 'react-loader-spinner';
 
 const loadingStyle = `

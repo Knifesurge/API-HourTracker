@@ -1,5 +1,5 @@
 import { apiClient } from "./client";
-import { type Activity } from "./activities";
+import { type Activity } from "../../activities/api/activities";
 
 interface TimeEntry {
     id: number;
