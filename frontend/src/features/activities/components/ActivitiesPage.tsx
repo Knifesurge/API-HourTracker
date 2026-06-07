@@ -96,9 +96,100 @@ const ActivitiesPage: React.FC = () => {
             </div>
 
             {/* Feedback Status Bars */}
+            {error && (
+                <div className="p-3 bg-danger/10 border border-danger/20 text-danger text-xs font-medium rounded-xl">
+                    {error}
+                </div>
+            )}
+
+            {successMessage && (
+                <div className="p-3 bg-success/10 border border-success/20 text-success text-xs font-medium rounded-xl">
+                    {successMessage}
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 md:grid-cols3 gap-6 items-start">
+                {/* Left Column: Create new Activity Form Card */}
+                <div className="p-6 bg-card border border-border rounded-xl shadow-subtle space-y-4">
+                    <div className="space-y-1">
+                        <h3 className="text-sm font-semibold uppercase tracking-wider text-secondary">Add New Activity</h3>
+                        <p className="text-xs text-muted">Create a unique named Activity to start tracking.</p>
+                    </div>
+
+                    <form
+                        onSubmit={handleCreateActivity}
+                        className="space-y-4"
+                    >
+                        <div className="flex flex-col gap-1.5">
+                            <input
+                                type="text"
+                                value={newActivityName}
+                                onChange={(e) => setNewActivityName(e.target.value)}
+                                placeholder="e.g., Cycling, Programming, Meetings..."
+                                disabled={actionLoading}
+                                maxLength={50}
+                                className="w-full px-3 py-2 rounded-lg bg-input border border-input-border text-sm text-primary focus:outline-none focus:border-accent transition-all disabled:opacity-50"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={actionLoading || !newActivityName.trim()}
+                            className="w-full font-semibold text-sm py-2 px-4 rounded-lg bg-accent text-accent-foreground hover:bg-accent-hover transition-all disabled:opacity-50 cursor-pointer text-center"
+                        >
+                            {actionLoading ? "Creating..." : "Create new Activity"}
+                        </button>
+                    </form>
+                </div>
+
+                {/* Right column: List and Management Ledger */}
+                <div className="p-6 bg-card border border-border rounded-xl shadow-subtle md:col-span-2 space-y-4">
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-secondary">Your Activities</h3>
+
+                    {activities.length === 0 ? (
+                        <p className="text-xs text-muted text-center py-8">You have no Activities. Create one to start tracking!</p>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse text-sm">
+                                <thead>
+                                    <tr className="border-b border-border text-xs font-semibold text-muted bg-surface-hover/20">
+                                        <th className="py-2 px-3">Activity ID</th>
+                                        <th className="py-2 px-3">Activity Name</th>
+                                        <th className="py-2 px-3">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-border">
+                                    {activities.map(activity => (
+                                        <tr
+                                            key={activity.id}
+                                            className="hover:bg-surface-hover/30 transition-colors"
+                                        >
+                                            <td className="py-3 px-3 text-secondary font-mono text-xs w-24">
+                                                #{activity.id}
+                                            </td>
+                                            <td className="py-3 px-3 font-medium capitalize">
+                                                {activity.name}
+                                            </td>
+                                            <td className="py-3 px-3 text-right">
+                                                <button
+                                                    onClick={() => handleDeleteActivity(activity.id, activity.name)}
+                                                    disabled={actionLoading}
+                                                    className="px-3 py-1 text-xs font-semibold rounded-md bg-surface border border-border text-primary hover:bg-danger/10 hover:text-danger hover:border-danger/30 transition-colors cursor-pointer"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
-}
+};
 
 export {
     ActivitiesPage
