@@ -30,6 +30,13 @@ const dashboardHeaderStyle = `
   text-primary
 `;
 
+const dashboardSubHeaderStyle = `
+  text-xl
+  font-semibold
+  tracking-tight
+  text-muted
+`;
+
 const dashboardErrorStyle = `
   p-3
   bg-danger/10
@@ -192,7 +199,7 @@ const DashboardPage: React.FC = () => {
       {/* Header row */}
       <div>
         <h1 className={dashboardHeaderStyle}>Time Tracker Dashboard</h1>
-        <p className={dashboardHeaderStyle}>
+        <p className={dashboardSubHeaderStyle}>
           Manage your active working clock counters and historical time entries.
         </p>
       </div>

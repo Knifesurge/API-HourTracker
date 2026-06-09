@@ -1,3 +1,11 @@
+/*
+ *  TODO
+ *  - Delete doesn't remove associated TimeEntries from the dashboard
+ *      - Need verification that it deletes them from database
+ *  - Users are able to add duplicate Activities already present from seed data
+ *      - Naming needs to be looked at for this 
+ */
+
 import React, { useEffect, useState } from 'react';
 import {
     fetchMyActivitiesAPI,
