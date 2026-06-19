@@ -1,4 +1,4 @@
-import { apiClient } from "../../auth/api/client";
+import { apiClient } from "@/features/auth/api/client";
 
 interface Activity {
     id: number;
