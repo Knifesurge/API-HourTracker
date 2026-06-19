@@ -18,6 +18,8 @@ services:
 
   # Backend API config
   backend_api:
+    pull_policy: never
+    # pull_policy: if_not_present
     build:
       context: ../backend
       dockerfile: Dockerfile
@@ -38,6 +40,8 @@ services:
 
   # Frontend config
   frontend_client:
+    pull_policy: never
+    # pull_policy: if_not_present
     build:
       context: ../frontend
       dockerfile: Dockerfile
