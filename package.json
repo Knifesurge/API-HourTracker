@@ -13,7 +13,8 @@
         "start:backend": "npm run start -w @api-hourtracker/backend",
         "start:frontend": "npm run start -w @api-hourtracker/frontend",
         "start:docker": "docker compose -f docker/docker-compose.yml --env-file .env up --build",
-        "stop:docker": "docker compose -f docker/docker-compose.yml --env-file .env down"
+        "stop:docker": "docker compose -f docker/docker-compose.yml --env-file .env down",
+        "start:docker:local": "docker load < .postgres_16_alpine.tar.gz && npm run start:docker"
     },
     "dependencies": {
         "concurrently": "^9.2.1"

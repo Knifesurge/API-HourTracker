@@ -1,6 +1,9 @@
 services:
   postgres_db:
     image: postgres:16-alpine
+    pull_policy: never # Never pull image, use local version (for development)
+    # Comment above and uncomment below to pull only if not present
+    # pull_policy: if_not_present
     container_name: hourtracker-postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
