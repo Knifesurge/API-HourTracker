@@ -3,13 +3,15 @@ import { Sidebar } from "@/shared/ui";
 import { DashboardPage } from "@/features/dashboard/components";
 import { AnalyticsPage } from "@/features/analytics";
 import { ActivitiesPage } from "@/features/activities";
+import { LeaderboardPage } from "@/features/leaderboard";
 import { DNA } from "react-loader-spinner";
 import { useAuth } from "@/features/auth/hooks/useAuth";
 
 const pages = [
   "Dashboard",
   "Activities",
-  "Analytics"
+  "Analytics",
+  "Leaderboard"
 ] as const;
 
 type Page = typeof pages[number];
@@ -18,7 +20,8 @@ type Page = typeof pages[number];
 const pageComponents: Record<Page, React.ComponentType> = {
   Dashboard: DashboardPage,
   Analytics: AnalyticsPage,
-  Activities: ActivitiesPage
+  Activities: ActivitiesPage,
+  Leaderboard: LeaderboardPage
 };
 
 const AppLayout = () => {
