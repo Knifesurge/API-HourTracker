@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { getGlobalStats, getActivityLeaderboard } from '@/backend/controllers/analyticsController.js';
+import { getUserAnalytics } from '@/backend/controllers/analyticsController.js';
+import { requireAuth } from '../middleware/index.js';
 
 const router = Router();
 
-router.get('/global-stats', getGlobalStats);
-router.get('/leaderboard', getActivityLeaderboard);
+router.get('/user-stats', requireAuth, getUserAnalytics);
 
 export default router;

@@ -20,6 +20,9 @@ function randomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/**
+ * Generates a historical timestamp distributed across the new analytics filtering bounds.
+ */
 function randomPastDate(daysBack: number) {
   const now = new Date();
   const past = new Date(
@@ -28,11 +31,14 @@ function randomPastDate(daysBack: number) {
 
   past.setHours(randomInt(6, 22));
   past.setMinutes(randomInt(0, 59));
+  past.setSeconds(0);
+  past.setMilliseconds(0);
 
   return past;
 }
 
 async function main() {
+  console.log("Purging database records...");
   await prisma.timeEntry.deleteMany();
   await prisma.userActivity.deleteMany();
   await prisma.activity.deleteMany();
@@ -41,7 +47,7 @@ async function main() {
   /*
     GLOBAL ACTIVITIES
   */
-
+  console.log("Generating master activities global registry...");
   const activities = await Promise.all(
     ACTIVITY_NAMES.map((name) =>
       prisma.activity.create({
@@ -57,8 +63,7 @@ async function main() {
   /*
     USERS
   */
-
-    // Hash the dummy password
+  console.log("Generating multi-user ecosystem simulation records...");
   const hashedPassword = await bcrypt.hash('password123', 10);
 
   const usersData = [
@@ -78,8 +83,7 @@ async function main() {
 
   for (let i = 0; i < usersData.length; i++) {
     const userData = usersData[i];
-
-    if (!userData) continue;  // Guard against undefined to satisfy checks
+    if (!userData) continue;
 
     const user = await prisma.user.create({
       data: userData,
@@ -88,29 +92,19 @@ async function main() {
     users.push(user);
 
     /*
-      ASSIGN ACTIVITIES
+      ASSIGN USER WORKSPACE ROUTINES
     */
-
     let assignedActivities: string[];
 
     if (i === 0) {
-      // Admin gets 5 default activities
-      assignedActivities = [
-        "Coding",
-        "Gym",
-        "Reading",
-        "Gaming",
-        "Writing",
-      ];
+      assignedActivities = ["coding", "gym", "reading", "gaming", "writing"];
     } else {
       const shuffled = [...ACTIVITY_NAMES].sort(() => 0.5 - Math.random());
-
-      assignedActivities = shuffled.slice(0, randomInt(3, 6));
+      assignedActivities = shuffled.slice(0, randomInt(4, 7));
     }
 
     for (const activityName of assignedActivities) {
       const activity = activityMap.get(activityName);
-
       if (!activity) continue;
 
       await prisma.userActivity.create({
@@ -122,28 +116,23 @@ async function main() {
     }
 
     /*
-      CREATE TIME ENTRIES
+      CREATE REALISTIC DEEP HISTORICAL SESSIONS
     */
-
     const userActivities = assignedActivities
       .map((name) => activityMap.get(name))
       .filter(Boolean);
 
-    const entryCount = randomInt(2, 6);
+    // Increase tracking volume dramatically to feed 1d to 365d analytics views cleanly
+    const entryCount = randomInt(45, 90); 
 
     for (let j = 0; j < entryCount; j++) {
-      const activity =
-        userActivities[randomInt(0, userActivities.length - 1)];
-
+      const activity = userActivities[randomInt(0, userActivities.length - 1)];
       if (!activity) continue;
 
-      const startTime = randomPastDate(30);
-
+      // Evenly distribute metrics over the course of a trailing calendar year
+      const startTime = randomPastDate(365);
       const durationSeconds = randomInt(1800, 14400); // 30 mins -> 4 hours
-
-      const endTime = new Date(
-        startTime.getTime() + (durationSeconds * 1000)
-      );
+      const endTime = new Date(startTime.getTime() + (durationSeconds * 1000));
 
       await prisma.timeEntry.create({
         data: {
@@ -157,7 +146,7 @@ async function main() {
     }
   }
 
-  console.log("Database seeded successfully.");
+  console.log("Database seeded successfully with deep year-long trend line matrix entries.");
 }
 
 main()

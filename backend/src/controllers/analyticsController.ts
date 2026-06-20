@@ -1,6 +1,11 @@
 import type { Request, Response } from 'express';
 import { prisma } from "@/backend/lib/prisma.js";
-
+import { AuthRequest } from '../middleware/index.js';
+//#region deprecated global analytics functions
+/* This project has moved away from global stats and leaderboards, but these functions are 
+ * left here to give examples on how they would have been used.
+ */
+/*
 const getGlobalStats = async (req: Request, res: Response) => {
     try {
         // Higher performance to fire parallel database queries
@@ -25,7 +30,8 @@ const getGlobalStats = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Failed to retrieve global statistics.' });
     }
 }
-
+*/
+/*
 const getActivityLeaderboard = async (req: Request, res: Response) => {
     try {
         // Use Prisma groupBy to rank activities by total duration spent
@@ -60,8 +66,19 @@ const getActivityLeaderboard = async (req: Request, res: Response) => {
         return res.status(500).json({ error: 'Failed compiling leaderboard data.' });
     }
 }
+*/
+//#endregion
+
+const getUserAnalytics = async (req: AuthRequest, res: Response) => {
+    try {
+        const userId = req.userId;
+
+        const daysParam = req.query.days ? parseInt(req.query.days as string, 10) : 30;
+
+        
+    }
+};
 
 export { 
-    getGlobalStats,
-    getActivityLeaderboard
+    getUserAnalytics
 }
