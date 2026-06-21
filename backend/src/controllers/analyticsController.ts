@@ -146,13 +146,13 @@ const getUserAnalytics = async (req: AuthRequest, res: Response) => {
             .slice(0, 3);
         
         return res.json({
-            metrics: {
+            userMetrics: {
                 totalHours: totalHoursDisplay,
                 completedSessions,
                 activitiesCount: uniqueActivitiesCount
             },
             topActivities,
-            breakdown
+            userActivityBreakdown: breakdown
         });
     } catch (error: any) {
         return res.status(500).json({ error: 'Failed compiling user analytics data.' });
