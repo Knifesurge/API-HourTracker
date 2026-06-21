@@ -1,31 +1,31 @@
 import { apiClient } from "@/features/auth/api/client";
 
-interface TimeDistribution {
+interface UserActivityBreakdown {
     activityName: string;
-    minutes: number;
+    hours: number;
+    numSessions: number;
     percentage: number;
 };
 
-interface LeaderboardEntry {
-    activityName: string;
-    hoursTracked: number;
-    numSessions: number;
-};
+interface UserAnalyticsMetrics {
+    totalHours: number;
+    completedSessions: number;
+    numActivities: number;
+}
 
 interface AnalyticsPayload {
-    distribution: TimeDistribution[];
-    leaderboard: LeaderboardEntry[];
+    userMetrics: UserAnalyticsMetrics;
+    userActivityBreakdown: UserActivityBreakdown[];
+    topActivities: UserActivityBreakdown[];
 };
 
-const fetchAnalyticsLeaderboardAPI = async (): Promise<AnalyticsPayload> => {
-    const { data } = await apiClient.get<AnalyticsPayload>('/analytics/leaderboard');
+const fetchUserAnalyticsAPI = async (days: number): Promise<AnalyticsPayload> => {
+    const { data } = await apiClient.get<AnalyticsPayload>(`/analytics/user-stats?days=${days}`);
     return data;
 }
 
 
 export {
-    type TimeDistribution,
-    type LeaderboardEntry,
     type AnalyticsPayload,
-    fetchAnalyticsLeaderboardAPI
+    fetchUserAnalyticsAPI
 }

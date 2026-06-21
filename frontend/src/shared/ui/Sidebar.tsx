@@ -33,6 +33,9 @@ const Sidebar = ({ validPages, activePage, onPageChange, currentUser, onLogout }
                 p-4
                 flex
                 flex-col
+                sticky
+                top-0
+                h-screen
             ">
             {/* LOGO */}
             <div className="mb-8">

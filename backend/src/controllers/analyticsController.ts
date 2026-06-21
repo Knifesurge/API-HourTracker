@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { prisma } from "@/backend/lib/prisma.js";
 import { AuthRequest } from '../middleware/index.js';
+import { z } from 'zod';
 //#region deprecated global analytics functions
 /* This project has moved away from global stats and leaderboards, but these functions are 
  * left here to give examples on how they would have been used.
@@ -69,13 +70,92 @@ const getActivityLeaderboard = async (req: Request, res: Response) => {
 */
 //#endregion
 
+const AnalyticsSchema = z.object({
+    days: z.coerce.number('Days must be standard numeric format').optional()
+});
+
+/*
+ *  TODO: Currently does not provide data when query param provided
+ * {"metrics":{"totalHours":0,"completedSessions":0,"activitiesCount":0},"topActivities":[],"breakdown":[]}
+ */
 const getUserAnalytics = async (req: AuthRequest, res: Response) => {
+    const validation = AnalyticsSchema.safeParse(req.query);
+    if (!validation.success) {
+        return res.status(400).json({ error: z.treeifyError(validation.error) });
+    }
+    
+    const userId = req.userId;
+    // Default to 365 if no days param given
+    const daysParam = validation.data.days ? validation.data.days : 365;
+    
     try {
-        const userId = req.userId;
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - daysParam);
 
-        const daysParam = req.query.days ? parseInt(req.query.days as string, 10) : 30;
+        const numericUserId = parseInt(userId || '');
+        if (isNaN(numericUserId)) {
+            return res.status(401).json({ error: 'Invalid user session context.' });
+        }
+        // Fetch user time-entries within the specified date range
+        const timeEntries = await prisma.timeEntry.findMany({
+            where: {
+                userId: numericUserId,
+                startTime: { gte: cutoffDate }
+            },
+            include: {
+                activity: true
+            }
+        });
 
+        // Perform aggregation loops
+        let totalSeconds = 0;
+        const completedSessions = timeEntries.filter(e => e.endTime !== null).length;
+
+        // Map to group total tracked seconds and run counter per unique activity type
+        const activityMap: Record<string, { name: string; seconds: number; sessions: number }> = {};
+
+        timeEntries.forEach((entry) => {
+            if (!entry.activity) return;
+
+            const seconds = entry.duration || 0;
+            totalSeconds += seconds;
+
+            const activityName = entry.activity.name;
+            if (!activityMap[activityName]) {
+                activityMap[activityName] = { name: activityName, seconds: 0, sessions: 0 };
+            }
+
+            activityMap[activityName].seconds += seconds;
+            activityMap[activityName].sessions += 1;
+        });
+
+        const totalHoursDisplay = Number((totalSeconds / 3600).toFixed(1));
+        const uniqueActivitiesCount = Object.keys(activityMap).length;
+
+        // Compute precise percentages
+        const breakdown = Object.values(activityMap).map((item) => ({
+            activityName: item.name,
+            hours: Number((item.seconds / 3600).toFixed(1)),
+            numSessions: item.sessions,
+            percentage: totalSeconds > 0 ? Math.round((item.seconds / totalSeconds) * 100) : 0,
+        }));
+
+        // Sort to capture top performing Activities
+        const topActivities = [...breakdown]
+            .sort((a, b) => b.hours - a.hours)
+            .slice(0, 3);
         
+        return res.json({
+            metrics: {
+                totalHours: totalHoursDisplay,
+                completedSessions,
+                activitiesCount: uniqueActivitiesCount
+            },
+            topActivities,
+            breakdown
+        });
+    } catch (error: any) {
+        return res.status(500).json({ error: 'Failed compiling user analytics data.' });
     }
 };
 
