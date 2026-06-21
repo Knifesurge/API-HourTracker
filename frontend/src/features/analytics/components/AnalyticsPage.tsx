@@ -149,14 +149,16 @@ const AnalyticsPage: React.FC = () => {
                         <div className={metricsCardStyle}>
                             <p className={metricsCardTitleStyle}>Activities Tracked</p>
                             <p className={metricsCardTextStyle}>
-                                {data.userMetrics.numActivities} <span className={metricsCardSubtextStyle}>activities</span>
+                                {data.userMetrics.activitiesCount} <span className={metricsCardSubtextStyle}>activities</span>
                             </p>
                         </div>
                     </div>
 
                     {/* Visual graph and Breakdown */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {/* Top 3 Activities tracked */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Top 3 Activities tracked 
+                            TODO: Add some space between title and first item.
+                        */}
                         <div className={metricsCardStyle}>
                             <p className={metricsCardTitleStyle}>Top Activities</p>
                             <div className="space-y-3 flex-1 flex flex-col justify-center">
@@ -180,7 +182,7 @@ const AnalyticsPage: React.FC = () => {
                             <div className="flex items-center gap-5 w-full justify-center">
                                 <div className="w-24 h-24 rounded-full border border-strong relative shrink-0" style={pieChartStyle} />
                                 <div className="space-y-1.5 overflow-hidden flex-1 max-w-[130px]">
-                                    {data.userActivityBreakdown.slice(0, 4).map((item, index) => (
+                                    {data.userActivityBreakdown.sort((a, b) => b.percentage - a.percentage).map((item, index) => (
                                         <div key={index} className="flex items-center gap-1.5 text-[11px] truncate">
                                             <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: tailwindChartColors[index % tailwindChartColors.length] }} />
                                             <span className="text-muted truncate">{item.activityName}</span>

@@ -10,7 +10,7 @@ interface UserActivityBreakdown {
 interface UserAnalyticsMetrics {
     totalHours: number;
     completedSessions: number;
-    numActivities: number;
+    activitiesCount: number;
 }
 
 interface AnalyticsPayload {
