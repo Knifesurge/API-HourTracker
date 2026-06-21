@@ -82,9 +82,6 @@ const AnalyticsPage: React.FC = () => {
         background: gradientSlices ? `conic-gradient(${gradientSlices})` : "#3f3f46"
     };
 
-    const maxHoursLogged = data?.userActivityBreakdown.reduce((max, item) => item.hours > max ? item.hours : max, 0.1) || 1;
-
-
     if (isLoading && !data) {
         return (
             <div className={loadingStyle}>
